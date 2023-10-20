@@ -1,161 +1,69 @@
-<?php include 'template/header.php' ?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Hola mundo</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+	<link rel="stylesheet" href="Estilo/style.css">
+	<link rel="stylesheet" href="Estilo/styleaccount.css"> <!-- Agrega el archivo CSS de estilo aquí -->
+</head>
+<body>
+	
+		<h1 class="text-center">Nintendo</h1>
+	</div>
 
-<?php
-    include_once "model/conexion.php";
-    $sentencia = $bd -> query("select * from persona");
-    $persona = $sentencia->fetchAll(PDO::FETCH_OBJ);
-    //print_r($persona);
-?>
+	<div class="hero-image border">
+		<div class="container-sm">
+			<div class="row my-5">
+				<div class="col-12">
+					<h3>Ingresar</h3>
+					<hr>
+				</div>
+				<div>
+					<form action="login.php" method="post" class="styled-form"> <!-- Agrega la clase "styled-form" al formulario -->
+						<?php if (isset($_GET['error'])) { ?>
+							<p class="error"><?php echo $_GET['error']; ?></p>
+						<?php } ?>
+						<div class="mb-3">
+							<label for="exampleInputEmail1" class="form-label">Correo electrónico</label>
+							<input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp">
+							<div id="emailHelp" class="form-text">Nunca compartiremos tu correo con alguien.</div>
+						</div>
+						<div class="mb-3">
+							<label for="exampleInputPassword1" class="form-label">Contraseña</label>
+							<input type="password" class="form-control" id="pass" name="pass">
+						</div>
+						<button type="submit" class="btn btn-primary">Entrar</button>
+						<a href="registro.php" class="btn btn-primary">Crear una cuenta</a>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-7">
-            <!-- inicio alerta -->
-            <?php 
-                if(isset($_GET['mensaje']) and $_GET['mensaje'] == 'falta'){
-            ?>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>Error!</strong> Rellena todos los campos.
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            <?php 
-                }
-            ?>
+<script type="text/javascript">
+	function muestraselect(str) {
+		var conexion;
+		if (str == "") {
+			document.getElementById("txtHint").innerHTML = "";
+			return;
+		}
 
+		if (window.XMLHttpRequest) {
+			conexion = new XMLHttpRequest();
+		}
 
-            <?php 
-                if(isset($_GET['mensaje']) and $_GET['mensaje'] == 'registrado'){
-            ?>
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>Registrado!</strong> Se agregaron los datos.
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            <?php 
-                }
-            ?>   
-            
-            
+		conexion.onreadystatechange = function () {
+			if (conexion.readyState == 4 && conexion.status == 200) {
+				document.getElementById("div").innerHTML = conexion.responseText;
+			}
+		}
 
-            <?php 
-                if(isset($_GET['mensaje']) and $_GET['mensaje'] == 'error'){
-            ?>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>Error!</strong> Vuelve a intentar.
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            <?php 
-                }
-            ?>   
+		conexion.open("GET", "pais.php?c=" + str, true);
+		conexion.send();
+	}
+</script>
 
-
-
-            <?php 
-                if(isset($_GET['mensaje']) and $_GET['mensaje'] == 'editado'){
-            ?>
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>Cambiado!</strong> Los datos fueron actualizados.
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            <?php 
-                }
-            ?> 
-
-
-            <?php 
-                if(isset($_GET['mensaje']) and $_GET['mensaje'] == 'eliminado'){
-            ?>
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            <strong>Eliminado!</strong> Los datos fueron borrados.
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            <?php 
-                }
-            ?> 
-
-            <!-- fin alerta -->
-            <div class="card">
-                <div class="card-header">
-                    Lista de personas
-                </div>
-                <div class="p-4">
-                    <table class="table align-middle">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Nombres</th>
-                                <th scope="col">Apellido Paterno</th>
-                                <th scope="col">Apellido Materno</th>
-                                <th scope="col">F.Nacimiento</th>
-                                <th scope="col">Celular</th>
-                                <th scope="col" colspan="3">Opciones</th> <!-- Se añadió una columna para el nuevo botón -->
-                            </tr>
-                        </thead>
-                        <tbody>
-                            
-                            <?php 
-                                foreach($persona as $dato){ 
-                            ?>
-
-                            <tr>
-                                <td scope="row"><?php echo $dato->id; ?></td>
-                                <td><?php echo $dato->nombres; ?></td>
-                                <td><?php echo $dato->apellido_paterno; ?></td>
-                                <td><?php echo $dato->apellido_materno; ?></td>
-                                <td><?php echo $dato->fecha_nacimiento; ?></td>
-                                <td><?php echo $dato->celular; ?></td>
-                                <td><a class="text-success" href="editar.php?codigo=<?php echo $dato->id; ?>"><i class="bi bi-pencil-square"></i></a></td>
-                                <td><a onclick="return confirm('Estas seguro de eliminar?');" class="text-danger" href="eliminar.php?codigo=<?php echo $dato->id; ?>"><i class="bi bi-trash"></i></a></td>
-                                <td> <!-- Nuevo botón -->
-                                    <a class="text-primary" href="agregarPromocion.php?codigo=<?php echo $dato->id; ?>">
-                                        <i class="bi bi-cursor"></i>
-                                    </a>
-                                </td>
-                            </tr>
-
-                            <?php 
-                                }
-                            ?>
-
-                        </tbody>
-                    </table>
-                    
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">
-                    Ingresar datos:
-                </div>
-                <form class="p-4" method="POST" action="registrar.php">
-                    <div class="mb-3">
-                        <label class="form-label">Nombres: </label>
-                        <input type="text" class="form-control" name="txtNombres" autofocus required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Apellido Paterno: </label>
-                        <input type="text" class="form-control" name="txtApPaterno" autofocus required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Apellido Materno: </label>
-                        <input type="text" class="form-control" name="txtApMaterno" autofocus required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Fecha de Nacimiento: </label>
-                        <input type="date" class="form-control" name="txtFechaNacimiento" autofocus required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Celular: </label>
-                        <input type="number" class="form-control" name="txtCelular" autofocus required>
-                    </div>
-                    <div class="d-grid">
-                        <input type="hidden" name="oculto" value="1">
-                        <input type="submit" class="btn btn-primary" value="Registrar">
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<?php include 'template/footer.php' ?>
+</html>
