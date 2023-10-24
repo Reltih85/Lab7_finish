@@ -1,69 +1,85 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Hola mundo</title>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-	<link rel="stylesheet" href="Estilo/style.css">
-	<link rel="stylesheet" href="Estilo/styleaccount.css"> <!-- Agrega el archivo CSS de estilo aquí -->
-</head>
-<body>
-	
-		<h1 class="text-center">Nintendo</h1>
-	</div>
 
-	<div class="hero-image border">
-		<div class="container-sm">
-			<div class="row my-5">
-				<div class="col-12">
-					<h3>Ingresar</h3>
-					<hr>
-				</div>
-				<div>
-					<form action="login.php" method="post" class="styled-form"> <!-- Agrega la clase "styled-form" al formulario -->
-						<?php if (isset($_GET['error'])) { ?>
-							<p class="error"><?php echo $_GET['error']; ?></p>
-						<?php } ?>
-						<div class="mb-3">
-							<label for="exampleInputEmail1" class="form-label">Correo electrónico</label>
-							<input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp">
-							<div id="emailHelp" class="form-text">Nunca compartiremos tu correo con alguien.</div>
-						</div>
-						<div class="mb-3">
-							<label for="exampleInputPassword1" class="form-label">Contraseña</label>
-							<input type="password" class="form-control" id="pass" name="pass">
-						</div>
-						<button type="submit" class="btn btn-primary">Entrar</button>
-						<a href="registro.php" class="btn btn-primary">Crear una cuenta</a>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-</body>
+<?php include 'template/header.php' ?>
 
-<script type="text/javascript">
-	function muestraselect(str) {
-		var conexion;
-		if (str == "") {
-			document.getElementById("txtHint").innerHTML = "";
-			return;
-		}
+<?php
+    include_once "model/conexion.php";
+    $sentencia = $bd->query("select * from reservas");
+    $reservas = $sentencia->fetchAll(PDO::FETCH_OBJ);
+?>
 
-		if (window.XMLHttpRequest) {
-			conexion = new XMLHttpRequest();
-		}
 
-		conexion.onreadystatechange = function () {
-			if (conexion.readyState == 4 && conexion.status == 200) {
-				document.getElementById("div").innerHTML = conexion.responseText;
-			}
-		}
+<div class="container w-100 mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-gray-900 text-white">
+                    <h2 class="card-title text-center font-weight-bold text-dark">SISTEMA ADMINISTRATIVO</h2>
+                </div>
+                <div class="header-button">
+                    <a href="nuevo.php">
+                        <button type="button" class="btn btn-primary my-button" style="background-color: #0099FF;">Agregar nuevo Cliente</button>
+                    </a>
+                </div>
 
-		conexion.open("GET", "pais.php?c=" + str, true);
-		conexion.send();
-	}
-</script>
+    <div class="container-fluid">
+                    <form class="d-flex">
+                        <input class="form-control me-2 light-table-filter" data-table="table_id" type="text" 
+                        placeholder="Buscador automatico">
+                        <hr>
+                        </form>
+    </div>    
 
-</html>
+
+
+
+                <div class="p-4">
+                    <div class="table-responsive">
+                        <table class="table  table_id table-striped w-100 max-width-lg">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Nombres</th>
+                                    <th scope="col">Apellidos</th>
+                                    <th scope="col">DNI</th>
+                                    <th scope="col">Tipo de Habitacion</th>
+                                    <th scope="col">Fecha de Reserva</th>
+                                    <th scope="col">Ingreso</th>
+                                    <th scope="col">Salida</th>
+                                    <th scope="col">Celular</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($reservas as $dato): ?>
+                                    <tr>
+                                        <td scope="row"><?php echo $dato->id; ?></td>
+                                        <td><?php echo $dato->nombres; ?></td>
+                                        <td><?php echo $dato->apellidos; ?></td>
+                                        <td><?php echo $dato->DNI; ?></td>
+                                        <td><?php echo $dato->Tipo_habitacion; ?></td>
+                                        <td><?php echo $dato->Fecha_reserva; ?></td>
+                                        <td><?php echo $dato->hora_ingreso; ?></td>
+                                        <td><?php echo $dato->hora_salida; ?></td>
+                                        <td><?php echo $dato->celular; ?></td>
+                                        
+                                        <td>
+                                            <a class="text-success" href="editar.php?codigo=<?php echo $dato->id; ?>"><i class="bi bi-pencil-square"></i></a>
+                                            <a onclick="return confirm('¿Estás seguro de eliminar?');" class="text-danger" href="eliminar.php?codigo=<?php echo $dato->id; ?>"><i class="bi bi-trash"></i></a>
+                                            <td><a class="text-primary" href="agregarPromocion.php?codigo=<?php echo $dato->id; ?>">
+                                            <i class="bi bi-cursor"></i></a></td>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<?php include 'template/footer.php' ?>
