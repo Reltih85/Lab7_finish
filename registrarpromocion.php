@@ -14,6 +14,6 @@ $sentencia = $bd->prepare("INSERT INTO promociones(promocion, duracion, id_reser
 $resultado = $sentencia->execute([$promocion, $duracion, $codigo]);
 
 if ($resultado === TRUE) {
-    header('Location: agregarPromocion.php?codigo=' . $codigo);
+    header('Location: agregarPromocion.php?codigo='.$codigo);
 }
 ?>
