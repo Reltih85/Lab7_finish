@@ -1,5 +1,5 @@
 <?php 
-$contrasena = "";
+$contrasena = "tecsup2023";
 $usuario = "root";
 $nombre_bd = "crud";
 
