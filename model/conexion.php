@@ -1,6 +1,6 @@
 <?php 
 $contrasena = "tecsup2023"; 
-$usuario = "root";
+$usuario = "tecsup";
 $nombre_bd = "crud";
 
 try {
