@@ -1,6 +1,6 @@
 <?php
 //print_r($_POST);
-if (empty($_POST["txtPromocion"]) || empty($_POST["txtDuracion"]) || empty($_POST["codigo"])) {
+if (empty($_POST["txtPromocion"]) || empty($_POST["txtDuracion"])) {
     header('Location: index.php');
     exit();
 }
@@ -11,7 +11,7 @@ $duracion = $_POST["txtDuracion"];
 $codigo = $_POST["codigo"];
 
 $sentencia = $bd->prepare("INSERT INTO promociones(promocion, duracion, id_reserva) VALUES (?, ?, ?);");
-$resultado = $sentencia->execute([$promocion, $duracion, $codigo]);
+$resultado = $sentencia->execute([$promocion, $duracion, $codigo ]);
 
 if ($resultado === TRUE) {
     header('Location: agregarPromocion.php?codigo='.$codigo);
